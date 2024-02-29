@@ -1,0 +1,15 @@
+{
+  "name": "ex02",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "amoriah",
+  "license": "ISC",
+  "dependencies": {
+    "jssip": "^3.10.1"
+  }
+}
+
