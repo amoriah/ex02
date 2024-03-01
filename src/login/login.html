@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Login</title>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="form-login-container">
+        <form class="form" id="form" method="post" enctype="text/plain">
+          <h3 class="header">Login to softPhone</h3>
+          <div class="fields">
+            <input
+              type="text"
+              id="login"
+              class="field input_login"
+              placeholder="Login"
+              required
+            />
+            <input
+              type="password"
+              id="password"
+              class="field input_password"
+              placeholder="Password"
+              required
+            />
+            <input
+              type="text"
+              id="server"
+              class="field input_server"
+              placeholder="Server"
+              required
+            />
+          </div>
+          <div class="form-footer">
+            <button class="form-submit-button" id="submit-button" type="submit">
+              Login
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- <script src="auth.js"></script> -->
+    <script type="module" src="../index.js"></script>
+  </body>
+</html>

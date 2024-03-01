@@ -1,6 +1,6 @@
 // Create our JsSIP instance and run it:
-const JsSIP = require("jssip");
-var socket = new JsSIP.WebSocketInterface("wss://sip.myhost.com");
+import { WebSocketInterface, UA } from "jssip";
+var socket = new WebSocketInterface("wss://sip.myhost.com");
 var configuration = {
   sockets: [socket],
   uri: "sip:alice@example.com",
@@ -8,7 +8,7 @@ var configuration = {
 };
 //sip:yana_ucionf@tryit.jssip.net
 
-var ua = new JsSIP.UA(configuration);
+var ua = new UA(configuration);
 
 ua.start();
 
