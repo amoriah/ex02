@@ -1,10 +1,11 @@
 const loginForm = document.getElementById('form');
-const _socket = new JsSIP.WebSocketInterface('wss://voip.uiscom.ru');
-var _ua = new JsSIP.UA({
-  sockets: [_socket],
-  uri: 'sip:0336443@voip.uiscom.ru',
-  password: 'fLkFmpFFm5',
-});
+const blockLogin = document.getElementById('login-block');
+const blockPhone = document.getElementById('phone-block');
+const startCall = document.getElementById('start-call-btn');
+const endCall = document.getElementById('end-call-btn');
+const sipNumber = document.getElementById('num');
+var ua;
+var config;
 
 loginForm.addEventListener('submit', e => {
   e.preventDefault();
@@ -15,23 +16,38 @@ loginForm.addEventListener('submit', e => {
 
   JsSIP.debug.enable('JsSIP:*');
   const socket = new JsSIP.WebSocketInterface('wss://' + server);
-  const configuration = {
+  config = {
     sockets: [socket],
     uri: 'sip:' + login + '@' + server,
+    port: 9050,
     password: password,
-    authorization_user: 'PC',
     display_name: 'PC client',
-    register: true, // регистрация по умолчанию
+    register: true,
   };
 
-  const phone = new JsSIP.UA(configuration);
+  ua = new JsSIP.UA(config);
 
-  phone.on('connected', function (e) {
-    console.log('connected e=', e);
+  ua.start();
+
+  ua.on('registered', function (e) {
+    console.log('[ SUCCESS REGISTERED ]');
   });
+  ua.on('registrationFailed', function (e) {
+    console.log('[ FAILED REGISTERED ]: ', e.cause);
+  });
+  ua.on('connected', function () {
+    console.log('[ SUCCESS CONECTED ]');
+    blockLogin.style.display = 'none';
+    blockPhone.style.display = 'block';
+  });
+  ua.on('disconnected', function (e) {
+    console.log('[ DISCONNECTED ]: ', e.cause);
+    blockLogin.style.display = 'block';
+    blockPhone.style.display = 'none';
+  });
+});
 
-  phone.start();
-
+startCall.addEventListener('click', () => {
   const eventHandlers = {
     'progress': function (e) {
       console.log('Call is in progress');
@@ -46,14 +62,18 @@ loginForm.addEventListener('submit', e => {
       console.log('Call confirmed');
     },
   };
-
-  // Опции вызова
-  var options = {
+  const options = {
     'eventHandlers': eventHandlers,
-    'mediaConstraints': { 'audio': true, 'video': true },
+    'mediaConstraints': {
+      'audio': true,
+      'video': false,
+    },
   };
-
-  phone.call('sip:0336442@example.com', options);
-
-  // window.location.href = "./index.html";
+  console.log(sipNumber.value);
+  const session = ua.call(
+    `sip:${sipNumber.value}@voip.uiscom.ru:9050`,
+    options
+  );
+  console.log('session', session);
+  // phone.terminateSessions();
 });

@@ -1,86 +1,67 @@
 body {
-    background: rgb(239, 141, 157);
+  background: rgb(239, 141, 157);
 }
 
-.wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-family: Arial, Helvetica, sans-serif;
-    padding: 1em;
+#login-block {
+    margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 1em;
+  width: 300px;
+  /* border: 2px solid green; */
 }
 
 .form-login-container {
-    border: 10px solid rgba(239, 141, 157, 0.7);
-    border-radius: 4px;
-    background: rgb(255, 255, 255);
+  border: 10px solid rgba(239, 141, 157, 0.7);
+  border-radius: 4px;
+  background: rgb(255, 255, 255);
 }
 
 .header {
-    text-align: center;
-    padding: 0.5em;
-    margin: 0;
-    border-bottom: 1px solid rgba(128, 128, 128, 0.471);
-    background: rgb(240, 244, 245);
+  text-align: center;
+  padding: 0.5em;
+  margin: 0;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.471);
+  background: rgb(240, 244, 245);
 }
 
 .fields {
-    padding: 1em;
-    display: flex;
-    flex-direction: column;
-    height: 200px;
-    justify-content: space-around;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+  justify-content: space-around;
 }
 
 .field {
-    height: 30px;
-    border: 5px solid rgba(195, 211, 218, 0.471);
-    border-radius: 2px;
-    padding-left: 0.5em;
-    font-weight: bold;
-    outline: none;
+  height: 30px;
+  border: 5px solid rgba(195, 211, 218, 0.471);
+  border-radius: 2px;
+  padding-left: 0.5em;
+  font-weight: bold;
+  outline: none;
 }
 
 ::placeholder {
-    color: rgba(137, 132, 132, 0.373);
+  color: rgba(137, 132, 132, 0.373);
 }
 
 .form-footer {
-    padding: 0 1em 1em;
-    display: flex;
-    width: 330px;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.form-remember-block {
-    display: flex;
-    align-items: center;
-}
-
-.form-checkbox-label {
-    padding-left: 0.3em;
-    color: rgb(137, 132, 132);
-    font-weight: 600;
-    font-size: 14px;
+  padding: 0 1em 1em;
+  display: flex;
+  width: 330px;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .form-submit-button {
-    padding: 0.5em 1.3em;
-    border-radius: 20px;
-    border: 1.5px solid rgba(128, 128, 128, 0.334);
-    background: rgb(226, 239, 243);
-    color: rgb(89, 112, 124);
-    font-weight: 600;
-}
-
-.wrapper-footer {
-    color: rgb(243, 239, 239);
-    padding: 1em;
-    font-size: 14px;
-}
-
-.reset-password-link {
-    text-decoration: none;
-    color: rgba(232, 226, 226, 0.741);
+  padding: 0.5em 1.3em;
+  border-radius: 20px;
+  border: 1.5px solid rgba(128, 128, 128, 0.334);
+  background: rgb(226, 239, 243);
+  color: rgb(89, 112, 124);
+  font-weight: 600;
+  cursor: pointer;
 }
