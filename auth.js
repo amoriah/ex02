@@ -1,98 +1,59 @@
-const loginForm = document.getElementById("form");
-//https://habr.com/ru/articles/507554/
-loginForm.addEventListener("submit", (e) => {
+const loginForm = document.getElementById('form');
+const _socket = new JsSIP.WebSocketInterface('wss://voip.uiscom.ru');
+var _ua = new JsSIP.UA({
+  sockets: [_socket],
+  uri: 'sip:0336443@voip.uiscom.ru',
+  password: 'fLkFmpFFm5',
+});
+
+loginForm.addEventListener('submit', e => {
   e.preventDefault();
 
-  const login = document.getElementById("login").value;
-  const password = document.getElementById("password").value;
-  const server = document.getElementById("server").value;
+  const login = document.getElementById('login').value;
+  const password = document.getElementById('password').value;
+  const server = document.getElementById('server').value;
 
-  var socket = new JsSIP.WebSocketInterface("wss://" + server);
-  var configuration = {
+  JsSIP.debug.enable('JsSIP:*');
+  const socket = new JsSIP.WebSocketInterface('wss://' + server);
+  const configuration = {
     sockets: [socket],
-    uri: "sip:" + login + "@" + server,
+    uri: 'sip:' + login + '@' + server,
     password: password,
+    authorization_user: 'PC',
+    display_name: 'PC client',
+    register: true, // регистрация по умолчанию
   };
 
-  const ua = new JsSIP.UA(configuration);
+  const phone = new JsSIP.UA(configuration);
 
-  ua.start();
-  ua.register();
-  window.location.href = "./index.html";
+  phone.on('connected', function (e) {
+    console.log('connected e=', e);
+  });
+
+  phone.start();
+
+  const eventHandlers = {
+    'progress': function (e) {
+      console.log('Call is in progress');
+    },
+    'failed': function (e) {
+      console.log('Call failed with cause: ' + e.cause);
+    },
+    'ended': function (e) {
+      console.log('Call ended with cause: ' + e.cause);
+    },
+    'confirmed': function (e) {
+      console.log('Call confirmed');
+    },
+  };
+
+  // Опции вызова
+  var options = {
+    'eventHandlers': eventHandlers,
+    'mediaConstraints': { 'audio': true, 'video': true },
+  };
+
+  phone.call('sip:0336442@example.com', options);
+
+  // window.location.href = "./index.html";
 });
-
-var socket = new JsSIP.WebSocketInterface("wss://voip.uiscom.ru");
-var ua = new JsSIP.UA({
-  sockets: [socket],
-  uri: "sip:0336443@voip.uiscom.ru",
-  password: "fLkFmpFFm5",
-});
-
-const remoteAudio = new window.Audio();
-remoteAudio.autoplay = true;
-
-// События регистрации клиента
-ua.on("connected", function (e) {
-  /* Ваш код */
-});
-ua.on("disconnected", function (e) {
-  /* Ваш код */
-});
-
-ua.on("registered", function (e) {
-  /* Ваш код */
-});
-ua.on("unregistered", function (e) {
-  /* Ваш код */
-});
-ua.on("registrationFailed", function (e) {
-  /* Ваш код */
-});
-
-// Обработка событии исх. звонка
-var eventHandlers = {
-  progress: function (e) {
-    console.log("call is in progress");
-
-    session.connection.ontrack = function (e) {
-      console.log(e);
-      remoteAudio.srcObject = e.streams[0];
-    };
-  },
-  failed: function (e) {
-    console.log("call failed with cause: " + e.cause);
-    $("#call").css({ display: "flex" });
-    $("#hangup").css({ display: "none" });
-  },
-  ended: function (e) {
-    console.log("call ended with cause: " + e.cause);
-    $("#call").css({ display: "flex" });
-    $("#hangup").css({ display: "none" });
-  },
-  confirmed: function (e) {
-    console.log("call confirmed");
-    console.log(e);
-  },
-};
-
-var options = {
-  eventHandlers: eventHandlers,
-  mediaConstraints: { audio: true, video: false },
-};
-
-// // Кнопка для звонка
-// $("#call").click(function (e) {
-//   session = ua.call($("#num").val(), options);
-//   $("#call").css({ display: "none" });
-//   $("#hangup").css({ display: "flex" });
-// });
-
-// // Кнопка для отбоя звонка
-// $("#hangup").click(function () {
-//   if (session) {
-//     session.terminate();
-//   }
-
-//   $("#call").css({ display: "flex" });
-//   $("#hangup").css({ display: "none" });
-// });
