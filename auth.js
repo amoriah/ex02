@@ -36,14 +36,25 @@ loginForm.addEventListener('submit', e => {
   };
 
   ua = new JsSIP.UA(config);
-  ua.on('newRTCSession', function(data){
-    var session = data.session;
-    
-    // Пример обработки входящего вызова
-    console.log('Входящий вызов от: ' + session);
-    
-    // Пример ответа на входящий вызов
-    session.answer();
+
+  ua.on('newRTCSession', function (data) {
+    incomingSession = data.session;
+
+    if (incomingSession.direction === 'incoming') {
+      blockIncoming.style.display = 'block';
+      incomingSession.on('accepted', function () {
+        console.log('[ INCOMING CALL ACCEPTED ]');
+      });
+      incomingSession.on('ended', function () {
+        blockIncoming.style.display = 'none';
+        console.log('[ INCOMING CALL ENDED ]');
+      });
+      incomingSession.on('failed', function (e) {
+        console.log('[ INCOMING CALL FAILED ]: ', e.cause);
+      });
+    }
+
+    // session.answer();
   });
 
   ua.start();
@@ -103,33 +114,15 @@ startCall.addEventListener('click', () => {
 
 //отбой исходящего звонка
 stopCall.addEventListener('click', () => {
-  if (session) {
+  if (session || incomingSession) {
     ua.terminateSessions();
-    console.log('[ STOP CLICK -> TERMINATE SESSION ]');
+    console.log('[ STOP BUTTON CLICK -> TERMINATE SESSION ]');
   }
 });
 //входящий звонок
-ua.on('newRTCSession', function (data) {
-  incomingSession = data.session;
-  console.log(incomingSession);
-  if (incomingSession.direction === 'incoming') {
-    blockIncoming.style.display = 'block';
-    incomingSession.on('accepted', function () {
-      console.log('Звонок принят');
-    });
-
-    incomingSession.on('ended', function () {
-      blockIncoming.style.display = 'none';
-      console.log('Звонок завершен');
-    });
-
-    incomingSession.on('failed', function () {
-      console.log('Ошибка при звонке');
-    });
-  }
-});
 
 answerCall.addEventListener('click', () => {
+  console.log('[REPLY BUTTON CLICK]');
   incomingSession.answer({
     mediaConstraints: {
       audio: true,
