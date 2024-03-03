@@ -1,11 +1,13 @@
 const loginForm = document.getElementById('form');
 const blockLogin = document.getElementById('login-block');
-const blockOutcoming = document.getElementById('phone-outcoming-block');
-const blockIncoming = document.getElementById('phone-incoming-block');
 const startCall = document.getElementById('start-call-btn');
 const stopCall = document.getElementById('stop-call-btn');
 const answerCall = document.getElementById('answer-call-btn');
 const sipNumber = document.getElementById('num');
+const stopIncoming = document.getElementById('stop-incoming-call');
+//-----------------------------------------------------
+const content = document.querySelector('.content-wrapper');
+const waiting = document.querySelector('.waiting-icon');
 
 var ua, config, session, incomingSession;
 
@@ -32,15 +34,27 @@ loginForm.addEventListener('submit', e => {
     incomingSession = data.session;
 
     if (incomingSession.direction === 'incoming') {
-      blockIncoming.style.display = 'block';
+      console.log('[ INCOMING CALL ]');
+
+      answerCall.hidden = false;
+      console.log('answerCall.hidden', answerCall.hidden);
+      waiting.hidden = true;
+
       incomingSession.on('accepted', function () {
+        answerCall.hidden = true;
+        stopIncoming.hidden = false;
         console.log('[ INCOMING CALL ACCEPTED ]');
       });
       incomingSession.on('ended', function () {
-        blockIncoming.style.display = 'none';
+        answerCall.hidden = true;
+        stopIncoming.hidden = true;
+        waiting.hidden = false;
         console.log('[ INCOMING CALL ENDED ]');
       });
       incomingSession.on('failed', function (e) {
+        answerCall.hidden = true;
+        stopIncoming.hidden = true;
+        waiting.hidden = false;
         console.log('[ INCOMING CALL FAILED ]: ', e.cause);
       });
     }
@@ -57,12 +71,12 @@ loginForm.addEventListener('submit', e => {
   ua.on('connected', function () {
     console.log('[ SUCCESS CONECTED ]');
     blockLogin.style.display = 'none';
-    blockOutcoming.style.display = 'block';
+    content.style.display = 'flex';
   });
   ua.on('disconnected', function (e) {
     console.log('[ DISCONNECTED ]: ', e.cause);
     blockLogin.style.display = 'block';
-    blockOutcoming.style.display = 'none';
+    content.style.display = 'none';
   });
 });
 
@@ -71,12 +85,18 @@ startCall.addEventListener('click', () => {
   const eventHandlers = {
     'progress': function (e) {
       console.log('[ CALL IN PROGRESS ]');
+      startCall.style.display = 'none';
+      stopCall.hidden = false;
     },
     'failed': function (e) {
       console.log('[ CALL FAILED WITH ]: ' + e.cause);
+      startCall.style.display = 'block';
+      stopCall.hidden = true;
     },
     'ended': function (e) {
       console.log('[ CALL ENDED ]');
+      startCall.style.display = 'block';
+      stopCall.hidden = true;
     },
     'confirmed': function (e) {
       console.log('[ CALL CONFIRMED ]');
@@ -99,6 +119,12 @@ stopCall.addEventListener('click', () => {
   }
 });
 
+stopIncoming.addEventListener('click', () => {
+  if (session || incomingSession) {
+    ua.terminateSessions();
+    console.log('[ STOP BUTTON CLICK -> TERMINATE SESSION ]');
+  }
+});
 answerCall.addEventListener('click', () => {
   console.log('[REPLY BUTTON CLICK]');
   incomingSession.answer({
@@ -107,5 +133,5 @@ answerCall.addEventListener('click', () => {
       video: false,
     },
   });
-  answerCall.style.display = 'none';
+  // answerCall.hidden = true;
 });

@@ -8,10 +8,60 @@
     <title>Login</title>
   </head>
   <body>
+    <div class="content-wrapper" style="display: none">
+      <div class="status">status</div>
+      <div class="content">
+        <div class="block connect-block">
+          <div class="block-item outcomming-block">
+            <h4 class="block-title">Исходящий звонок</h4>
+            <input
+              value="0336442"
+              id="num"
+              type="text"
+              placeholder="Введите sip номер"
+            />
+            <button id="start-call-btn">Вызов</button>
+            <button id="stop-call-btn" hidden>Завершить</button>
+          </div>
+          <div class="block-item incoming-block">
+            <h4 class="block-title">Входящий звонок</h4>
+            <img
+              class="waiting-icon"
+              src="../icons/wait.svg"
+              alt="wait"
+              width="50px"
+              height="50px"
+            />
+            <button id="answer-call-btn" hidden>Ответить на звонок</button>
+            <button id="stop-incoming-call" hidden>Завершить</button>
+          </div>
+        </div>
+        <div class="block info-block">
+          <div class="block-item call-info">
+            <h4 class="block-title">Текущий звонок</h4>
+            <div class="info-content">
+              <span>Номер:</span>
+              <span>Время:</span>
+            </div>
+          </div>
+          <div class="block-item history">
+            <h4 class="block-title">История звонков</h4>
+            <ul class="history-list">
+              <li><span>время</span><span>тип</span><span>номер</span></li>
+              <li><span>время</span><span>тип</span><span>номер</span></li>
+              <li><span>время</span><span>тип</span><span>номер</span></li>
+              <li><span>время</span><span>тип</span><span>номер</span></li>
+              <li><span>время</span><span>тип</span><span>номер</span></li>
+              <li><span>время</span><span>тип</span><span>номер</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="login-block" style="display: block">
       <div class="form-login-container">
         <form class="form" id="form" method="post" enctype="text/plain">
-          <h3 class="header">SoftPhone</h3>
           <div class="fields">
             <input
               type="text"
@@ -46,23 +96,7 @@
         </form>
       </div>
     </div>
-    <div id="phone-outcoming-block" style="display: none">
-      <h2>Web Sip клиент на основе JsSIP</h2>
-      <div id="to">
-        <input
-          value="0336442"
-          id="num"
-          type="text"
-          placeholder="Введите sip номер"
-        />
-      </div>
-      <button id="start-call-btn">Вызов</button>
-      <button id="stop-call-btn">Завершить</button>
-    </div>
-    <div id="phone-incoming-block" style="display: none">
-      <button id="answer-call-btn">Ответить на звонок</button>
-      <!-- <button id="stop-call-btn">Завершить</button> -->
-    </div>
+
     <script src="../jssip.min.js"></script>
     <script src="script.js"></script>
   </body>
