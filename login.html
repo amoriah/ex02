@@ -8,7 +8,7 @@
     <title>Login</title>
   </head>
   <body>
-    <div id="login-block" style="display: block;">
+    <div id="login-block" style="display: block">
       <div class="form-login-container">
         <form class="form" id="form" method="post" enctype="text/plain">
           <h3 class="header">Login to softPhone</h3>
@@ -46,12 +46,21 @@
         </form>
       </div>
     </div>
-    <div id="phone-block" style="display: none;">
+    <div id="phone-outcoming-block" style="display: none">
       <h2>Web Sip клиент на основе JsSIP</h2>
       <div id="to">
-        <input value="0336442" id="num" type="text" placeholder="Введите sip номер" />
+        <input
+          value="0336442"
+          id="num"
+          type="text"
+          placeholder="Введите sip номер"
+        />
       </div>
       <button id="start-call-btn">Вызов</button>
+      <button id="stop-call-btn">Завершить</button>
+    </div>
+    <div id="phone-incoming-block" style="display: none">
+      <button id="answer-call-btn">Ответить на звонок</button>
       <button id="stop-call-btn">Завершить</button>
     </div>
     <script src="jssip.min.js"></script>

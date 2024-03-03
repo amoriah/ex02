@@ -1,11 +1,19 @@
 const loginForm = document.getElementById('form');
 const blockLogin = document.getElementById('login-block');
-const blockPhone = document.getElementById('phone-block');
+const blockOutcoming = document.getElementById('phone-outcoming-block');
+const blockIncoming = document.getElementById('phone-incoming-block');
 const startCall = document.getElementById('start-call-btn');
 const stopCall = document.getElementById('stop-call-btn');
+const answerCall = document.getElementById('answer-call-btn');
 const sipNumber = document.getElementById('num');
-var ua, config, session;
 
+var ua, config, session, incomingSession;
+
+const sessionDescriptionHandlerOptions = {
+  peerConnectionOptions: {
+    iceServers: [{ urls: `sip:${sipNumber.value}@voip.uiscom.ru` }],
+  },
+};
 
 //подключение к серверу
 loginForm.addEventListener('submit', e => {
@@ -20,13 +28,23 @@ loginForm.addEventListener('submit', e => {
   config = {
     sockets: [socket],
     uri: 'sip:' + login + '@' + server,
-    port: 9050,
     password: password,
-    display_name: 'PC client',
     register: true,
+    // port: 9050,
+    // display_name: 'PC client',
+    // sessionDescriptionHandlerOptions: sessionDescriptionHandlerOptions,
   };
 
   ua = new JsSIP.UA(config);
+  ua.on('newRTCSession', function(data){
+    var session = data.session;
+    
+    // Пример обработки входящего вызова
+    console.log('Входящий вызов от: ' + session);
+    
+    // Пример ответа на входящий вызов
+    session.answer();
+  });
 
   ua.start();
 
@@ -39,12 +57,12 @@ loginForm.addEventListener('submit', e => {
   ua.on('connected', function () {
     console.log('[ SUCCESS CONECTED ]');
     blockLogin.style.display = 'none';
-    blockPhone.style.display = 'block';
+    blockOutcoming.style.display = 'block';
   });
   ua.on('disconnected', function (e) {
     console.log('[ DISCONNECTED ]: ', e.cause);
     blockLogin.style.display = 'block';
-    blockPhone.style.display = 'none';
+    blockOutcoming.style.display = 'none';
   });
 });
 
@@ -70,6 +88,15 @@ startCall.addEventListener('click', () => {
       'audio': true,
       'video': false,
     },
+    'pcConfig': {
+      hackStripTcp: true, // Важно для хрома, чтоб он не тупил при звонке
+      rtcpMuxPolicy: 'negotiate', // Важно для хрома, чтоб работал multiplexing. Эту штуку обязательно нужно включить на астере.
+      iceServers: [],
+    },
+    'rtcOfferConstraints': {
+      offerToReceiveAudio: 1, // Принимаем только аудио
+      offerToReceiveVideo: 0,
+    },
   };
   session = ua.call(`sip:${sipNumber.value}@voip.uiscom.ru:9050`, options);
 });
@@ -81,3 +108,58 @@ stopCall.addEventListener('click', () => {
     console.log('[ STOP CLICK -> TERMINATE SESSION ]');
   }
 });
+//входящий звонок
+ua.on('newRTCSession', function (data) {
+  incomingSession = data.session;
+  console.log(incomingSession);
+  if (incomingSession.direction === 'incoming') {
+    blockIncoming.style.display = 'block';
+    incomingSession.on('accepted', function () {
+      console.log('Звонок принят');
+    });
+
+    incomingSession.on('ended', function () {
+      blockIncoming.style.display = 'none';
+      console.log('Звонок завершен');
+    });
+
+    incomingSession.on('failed', function () {
+      console.log('Ошибка при звонке');
+    });
+  }
+});
+
+answerCall.addEventListener('click', () => {
+  incomingSession.answer({
+    mediaConstraints: {
+      audio: true,
+      video: false,
+    },
+  });
+  answerCall.style.display = 'none';
+});
+
+const incomingCallOptions = {
+  eventHandlers: {
+    'progress': console.info,
+    'failed': console.error,
+    'ended': console.info,
+    'accepted': console.info,
+  },
+  'mediaConstraints': {
+    'audio': true,
+    'video': false,
+  },
+  'pcConfig': {
+    hackStripTcp: true, // Важно для хрома, чтоб он не тупил при звонке
+    rtcpMuxPolicy: 'negotiate', // Важно для хрома, чтоб работал multiplexing. Эту
+    //  штуку обязательно нужно включить на астере.
+    iceServers: [],
+  },
+  'rtcOfferConstraints': {
+    offerToReceiveAudio: 1, // Принимаем только аудио
+    offerToReceiveVideo: 0,
+  },
+};
+
+ua.invite(`sip:${sipNumber.value}@voip.uiscom.ru:9050`, incomingCallOptions);
