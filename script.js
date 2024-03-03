@@ -9,12 +9,6 @@ const sipNumber = document.getElementById('num');
 
 var ua, config, session, incomingSession;
 
-const sessionDescriptionHandlerOptions = {
-  peerConnectionOptions: {
-    iceServers: [{ urls: `sip:${sipNumber.value}@voip.uiscom.ru` }],
-  },
-};
-
 //подключение к серверу
 loginForm.addEventListener('submit', e => {
   e.preventDefault();
@@ -30,9 +24,6 @@ loginForm.addEventListener('submit', e => {
     uri: 'sip:' + login + '@' + server,
     password: password,
     register: true,
-    // port: 9050,
-    // display_name: 'PC client',
-    // sessionDescriptionHandlerOptions: sessionDescriptionHandlerOptions,
   };
 
   ua = new JsSIP.UA(config);
@@ -53,8 +44,6 @@ loginForm.addEventListener('submit', e => {
         console.log('[ INCOMING CALL FAILED ]: ', e.cause);
       });
     }
-
-    // session.answer();
   });
 
   ua.start();
@@ -99,27 +88,16 @@ startCall.addEventListener('click', () => {
       'audio': true,
       'video': false,
     },
-    'pcConfig': {
-      hackStripTcp: true, // Важно для хрома, чтоб он не тупил при звонке
-      rtcpMuxPolicy: 'negotiate', // Важно для хрома, чтоб работал multiplexing. Эту штуку обязательно нужно включить на астере.
-      iceServers: [],
-    },
-    'rtcOfferConstraints': {
-      offerToReceiveAudio: 1, // Принимаем только аудио
-      offerToReceiveVideo: 0,
-    },
   };
   session = ua.call(`sip:${sipNumber.value}@voip.uiscom.ru:9050`, options);
 });
 
-//отбой исходящего звонка
 stopCall.addEventListener('click', () => {
   if (session || incomingSession) {
     ua.terminateSessions();
     console.log('[ STOP BUTTON CLICK -> TERMINATE SESSION ]');
   }
 });
-//входящий звонок
 
 answerCall.addEventListener('click', () => {
   console.log('[REPLY BUTTON CLICK]');
@@ -131,28 +109,3 @@ answerCall.addEventListener('click', () => {
   });
   answerCall.style.display = 'none';
 });
-
-const incomingCallOptions = {
-  eventHandlers: {
-    'progress': console.info,
-    'failed': console.error,
-    'ended': console.info,
-    'accepted': console.info,
-  },
-  'mediaConstraints': {
-    'audio': true,
-    'video': false,
-  },
-  'pcConfig': {
-    hackStripTcp: true, // Важно для хрома, чтоб он не тупил при звонке
-    rtcpMuxPolicy: 'negotiate', // Важно для хрома, чтоб работал multiplexing. Эту
-    //  штуку обязательно нужно включить на астере.
-    iceServers: [],
-  },
-  'rtcOfferConstraints': {
-    offerToReceiveAudio: 1, // Принимаем только аудио
-    offerToReceiveVideo: 0,
-  },
-};
-
-ua.invite(`sip:${sipNumber.value}@voip.uiscom.ru:9050`, incomingCallOptions);
