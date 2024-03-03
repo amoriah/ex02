@@ -2,11 +2,12 @@ const loginForm = document.getElementById('form');
 const blockLogin = document.getElementById('login-block');
 const blockPhone = document.getElementById('phone-block');
 const startCall = document.getElementById('start-call-btn');
-const endCall = document.getElementById('end-call-btn');
+const stopCall = document.getElementById('stop-call-btn');
 const sipNumber = document.getElementById('num');
-var ua;
-var config;
+var ua, config, session;
 
+
+//подключение к серверу
 loginForm.addEventListener('submit', e => {
   e.preventDefault();
 
@@ -47,19 +48,20 @@ loginForm.addEventListener('submit', e => {
   });
 });
 
+//исходящий звонок
 startCall.addEventListener('click', () => {
   const eventHandlers = {
     'progress': function (e) {
-      console.log('Call is in progress');
+      console.log('[ CALL IN PROGRESS ]');
     },
     'failed': function (e) {
-      console.log('Call failed with cause: ' + e.cause);
+      console.log('[ CALL FAILED WITH ]: ' + e.cause);
     },
     'ended': function (e) {
-      console.log('Call ended with cause: ' + e.cause);
+      console.log('[ CALL ENDED ]');
     },
     'confirmed': function (e) {
-      console.log('Call confirmed');
+      console.log('[ CALL CONFIRMED ]');
     },
   };
   const options = {
@@ -69,11 +71,13 @@ startCall.addEventListener('click', () => {
       'video': false,
     },
   };
-  console.log(sipNumber.value);
-  const session = ua.call(
-    `sip:${sipNumber.value}@voip.uiscom.ru:9050`,
-    options
-  );
-  console.log('session', session);
-  // phone.terminateSessions();
+  session = ua.call(`sip:${sipNumber.value}@voip.uiscom.ru:9050`, options);
+});
+
+//отбой исходящего звонка
+stopCall.addEventListener('click', () => {
+  if (session) {
+    ua.terminateSessions();
+    console.log('[ STOP CLICK -> TERMINATE SESSION ]');
+  }
 });
