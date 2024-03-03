@@ -43,7 +43,6 @@
   justify-content: space-between;
 }
 
-
 .content-wrapper {
   padding: 2em;
   display: flex;
@@ -51,18 +50,20 @@
   flex-direction: column;
 }
 .status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 1em;
   width: 60%;
-  height: 30px;
-  text-align: center;
+  height: 35px;
   font-size: large;
   font-weight: 600;
   color: white;
-
   border-radius: 8px;
-  background-color: rgb(31, 245, 31);
+  background-color: rgb(110, 230, 244);
   box-shadow: 1px 1px 3px 1px rgb(208, 203, 203);
 }
+
 .content {
   height: 100%;
   width: 100%;
