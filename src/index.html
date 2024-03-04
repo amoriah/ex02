@@ -9,65 +9,63 @@
   </head>
   <body>
     <div class="content-wrapper" style="display: none">
-      <div class="status">
-        <span class="status-title">Свободная линия</span>
-      </div>
       <div class="content">
         <div class="block connect-block">
-          <div class="block-item outcomming-block">
-            <h4 class="block-title">Исходящий звонок</h4>
-            <input
-              value="0336442"
-              class="sip-num"
-              type="text"
-              placeholder="Введите sip номер"
-            />
-            <button class="start-call-btn">Вызов</button>
-            <button
-              class="stop-call-btn terminate"
-              hidden
-              style="background-color: red"
-            >
-              Завершить
-            </button>
-          </div>
-          <div class="block-item incoming-block">
-            <h4 class="block-title">Входящий звонок</h4>
-            <img
-              class="waiting-icon"
-              src="../icons/wait.svg"
-              alt="wait"
-              width="50px"
-              height="50px"
-            />
-            <button
-              class="answer-call-btn"
-              hidden
-              style="background-color: rgb(31, 245, 31)"
-            >
-              Ответить на звонок
-            </button>
-            <button
-              class="stop-incoming-call terminate"
-              hidden
-              style="background-color: red"
-            >
-              Завершить
-            </button>
-            <button
-              class="reset-call terminate"
-              hidden
-              style="background-color: red"
-            >
-              Отклонить вызов
-            </button>
+          <div class="phone">
+            <div class="status">
+              <span class="status-title">Ожидание</span>
+            </div>
+
+            <div class="buttons">
+              <div class="btn input"></div>
+
+              <div class="btn num">1</div>
+              <div class="btn num">2</div>
+              <div class="btn num">3</div>
+
+              <div class="btn num">4</div>
+              <div class="btn num">5</div>
+              <div class="btn num">6</div>
+
+              <div class="btn num">7</div>
+              <div class="btn num">8</div>
+              <div class="btn num">9</div>
+
+              <div class="btn">
+                <img
+                  src="../icons/call-end.png"
+                  alt="end"
+                  class="call-icon end-call-icon"
+                />
+              </div>
+              <div class="btn num">0</div>
+              <div class="btn">
+                <img
+                  class="call-icon start-call-icon"
+                  src="../icons/start-call.png"
+                  alt="start"
+                  height="32px"
+                  width="32px"
+                />
+              </div>
+            </div>
+            <div class="clear-icon">
+              <div class="clear">
+                <img
+                  src="../icons/clean.png"
+                  alt="start"
+                  height="32px"
+                  width="32px"
+                />
+              </div>
+            </div>
           </div>
         </div>
         <div class="block info-block">
           <div class="block-item call-info">
             <h4 class="block-title">Текущий звонок</h4>
             <div class="info-content">
-              <span class="time">Время звонка: -</span>
+              <span class="time">Длительность: -</span>
             </div>
           </div>
           <div class="block-item history">
@@ -116,7 +114,8 @@
     </div>
     <script src="../jssip.min.js"></script>
     <script src="script.js" type="module"></script>
-    <script src="./utils/status.js" type="module"></script>
-    <script src="./utils/history.js" type="module"></script>
+    <script src="./handlers/status.js" type="module"></script>
+    <script src="./handlers/history.js" type="module"></script>
+    <script src="./handlers/register.js" type="module"></script>
   </body>
 </html>

@@ -1,3 +1,7 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
 .login-block {
   margin: auto;
   display: flex;
@@ -9,18 +13,10 @@
 }
 
 .form-login-container {
-  border: 2px solid rgba(239, 141, 157, 0.7);
-  box-shadow: 1px 1px 3px 1px rgb(224, 220, 220);
+  border: 2px solid rgba(117, 113, 127, 0.978);
+  box-shadow: 1px 1px 3px 1px rgb(233, 244, 168);
   border-radius: 8px;
   background: rgb(255, 255, 255);
-}
-
-.header {
-  text-align: center;
-  padding: 0.5em;
-  margin: 0;
-  border-bottom: 1px solid rgba(231, 80, 143, 0.471);
-  background: rgb(249, 236, 238);
 }
 
 .fields {
@@ -32,7 +28,7 @@
 }
 
 ::placeholder {
-  color: rgba(137, 132, 132, 0.373);
+  color: rgba(128, 128, 98, 0.213);
 }
 
 .form-footer {
@@ -53,15 +49,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 1em;
-  width: 60%;
+  margin: 1em 0;
+  width: 100%;
   height: 35px;
   font-size: large;
   font-weight: 600;
   color: white;
   border-radius: 8px;
   background-color: rgb(110, 230, 244);
-  box-shadow: 1px 1px 3px 1px rgb(208, 203, 203);
+  box-shadow: 1px 1px 3px 1px rgb(233, 244, 168);
 }
 
 .content {
@@ -74,15 +70,15 @@
 
 .block {
   margin: 1em;
-  color: rgb(86, 10, 23);
+  color: rgb(31, 10, 86);
 }
 
 .block-item {
   margin: 2em;
   padding: 1.5em;
   border-radius: 10px;
-  border: 1px solid rgb(239, 141, 157);
-  box-shadow: 1px 1px 3px 1px rgb(224, 220, 220);
+  border: 1px solid rgb(120, 120, 126);
+  box-shadow: 1px 1px 3px 1px rgb(233, 244, 168);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -106,16 +102,8 @@
   height: 100px;
 }
 
-.outcomming-block {
-  height: 120px;
-}
-
-.incoming-block {
-  height: 120px;
-}
-
 button {
-  background-color: rgb(239, 141, 157);
+  background-color: rgb(118, 120, 125);
   border: none;
   border-radius: 6px;
   padding: 6px 20px;
@@ -125,7 +113,7 @@ button {
 }
 
 button:hover {
-  background-color: rgba(239, 141, 157, 0.8);
+  background-color: rgba(117, 118, 127, 0.8);
 }
 
 input {
@@ -135,7 +123,7 @@ input {
   padding-left: 0.5em;
   font-weight: bold;
   outline: none;
-  color: rgb(150, 61, 113);
+  color: rgb(148, 148, 148);
   font-size: 14px;
 }
 .history {
@@ -157,7 +145,7 @@ input {
 li {
   padding: 2px 6px;
   margin-top: 3px;
-  background-color: pink;
+  background-color: rgb(233, 234, 238);
   border-radius: 3px;
   display: flex;
   flex-direction: row;
@@ -166,4 +154,74 @@ li {
 
 .list-title {
   font-weight: bold;
+}
+
+.phone {
+  border-radius: 10px;
+  background: rgb(233, 234, 238);
+  padding: 1em;
+  box-shadow: 4px 4px 4px rgb(233, 244, 168);
+}
+
+.buttons {
+  display: grid;
+  grid-template-areas: 'btn btn btn';
+  grid-gap: 6px;
+  justify-items: center;
+}
+
+.btn {
+  width: 70px;
+  height: 70px;
+  color: #3d3d3d;
+  background: #ffff;
+  border-radius: 33px;
+  text-align: center;
+  line-height: 70px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 2px 2px 2px rgb(233, 244, 168);
+}
+
+.btn.input {
+  grid-area: btn;
+  color: #adadad;
+  width: 100%;
+  text-align: right;
+  border-radius: 10px;
+  padding-right: 10px;
+  box-sizing: border-box;
+}
+.clear-icon {
+  display: flex;
+  margin-top: 10px;
+  width: 100%;
+
+  cursor: pointer;
+  justify-content: center;
+}
+.clear-icon:active {
+  padding-left: 1px;
+}
+
+.call-icon {
+  padding-top: 20px;
+}
+
+.btn:hover {
+  filter: brightness(95%);
+}
+
+.btn:active {
+  filter: brightness(85%);
+}
+
+@keyframes flicker {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }

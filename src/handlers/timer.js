@@ -35,5 +35,5 @@ export const updateFields = () => {
   const m = time.m < 10 ? '0' + time.m : time.m;
   const s = time.s < 10 ? '0' + time.s : time.s;
   const view = { h, m, s };
-  timeSpan.innerHTML = `Время звонка: ${view.h}:${view.m}:${view.s}`;
+  timeSpan.innerHTML = `Длительность: ${view.h}:${view.m}:${view.s}`;
 };

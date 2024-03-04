@@ -4,7 +4,6 @@ let history = [];
 
 export const addHistory = (time, type, number) => {
   console.log('[ ADD HISTORY ]');
-  console.log(time, type, number);
   const h = time.getHours();
   const m = time.getMinutes();
   const newHistoryItem = {
@@ -12,9 +11,8 @@ export const addHistory = (time, type, number) => {
     type: type,
     sipNumber: number,
   };
-  console.log('newHistoryItem', newHistoryItem);
-  const li = document.createElement('li');
 
+  const li = document.createElement('li');
   for (let key in newHistoryItem) {
     const span = document.createElement('span');
     span.textContent = newHistoryItem[key];
