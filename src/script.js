@@ -5,6 +5,7 @@ import { Status } from './utils/status.js';
 export const statusTitle = document.querySelector('.status-title');
 export const statusView = document.querySelector('.status');
 export const timeSpan = document.querySelector('.time');
+const terminateBtns = document.querySelectorAll('.terminate');
 
 const loginForm = document.getElementById('form');
 const blockLogin = document.getElementById('login-block');
@@ -127,20 +128,6 @@ startCall.addEventListener('click', () => {
   session = ua.call(`sip:${sipNumber.value}@voip.uiscom.ru:9050`, options);
 });
 
-stopCall.addEventListener('click', () => {
-  if (session) {
-    ua.terminateSessions();
-    console.log('[ STOP BUTTON CLICK -> TERMINATE SESSION ]');
-  }
-});
-
-stopIncoming.addEventListener('click', () => {
-  if (session) {
-    ua.terminateSessions();
-    console.log('[ STOP BUTTON CLICK -> TERMINATE SESSION ]');
-  }
-});
-
 answerCall.addEventListener('click', () => {
   console.log('[REPLY BUTTON CLICK]');
   session.answer({
@@ -148,5 +135,14 @@ answerCall.addEventListener('click', () => {
       audio: true,
       video: false,
     },
+  });
+});
+
+terminateBtns.forEach(button => {
+  button.addEventListener('click', () => {
+    if (session) {
+      console.log('[ STOP BUTTON CLICK -> TERMINATE SESSION ]');
+      ua.terminateSessions();
+    }
   });
 });
