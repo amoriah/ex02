@@ -1,5 +1,6 @@
 import { clearTime, updateFields } from './utils/timer.js';
-import { clearStatus } from './utils/status.js';
+import { clearStatus, changeStatus } from './utils/status.js';
+import { Status } from './utils/status.js';
 
 export const statusTitle = document.querySelector('.status-title');
 export const statusView = document.querySelector('.status');
@@ -7,16 +8,17 @@ export const timeSpan = document.querySelector('.time');
 
 const loginForm = document.getElementById('form');
 const blockLogin = document.getElementById('login-block');
-const startCall = document.getElementById('start-call-btn');
-const stopCall = document.getElementById('stop-call-btn');
-const answerCall = document.getElementById('answer-call-btn');
 const sipNumber = document.getElementById('num');
-const stopIncoming = document.getElementById('stop-incoming-call');
+
+const startCall = document.querySelector('.start-call-btn');
+const answerCall = document.querySelector('.answer-call-btn');
+const stopCall = document.querySelector('.stop-call-btn');
+const stopIncoming = document.querySelector('.stop-incoming-call');
 
 const content = document.querySelector('.content-wrapper');
 const waiting = document.querySelector('.waiting-icon');
 
-var ua, config, session, incomingSession, intervalId;
+var ua, config, session, intervalId;
 
 loginForm.addEventListener('submit', e => {
   e.preventDefault();
@@ -37,47 +39,30 @@ loginForm.addEventListener('submit', e => {
   ua = new JsSIP.UA(config);
 
   ua.on('newRTCSession', function (data) {
-    incomingSession = data.session;
+    session = data.session;
 
-    if (incomingSession.direction === 'incoming') {
+    if (session.direction === 'incoming') {
       console.log('[ INCOMING CALL ]');
+      changeStatus(Status.ringing, [waiting], [answerCall]);
 
-      statusTitle.innerHTML = 'Вызов';
-      statusView.style.background = 'orange';
-      answerCall.hidden = false;
-      waiting.hidden = true;
-
-      incomingSession.on('accepted', function () {
-        statusTitle.innerHTML = 'Соединение установлено';
-        statusView.style.background = 'rgb(31, 245, 31)';
-        answerCall.hidden = true;
-        stopIncoming.hidden = false;
+      session.on('accepted', function () {
         console.log('[ INCOMING CALL ACCEPTED ]');
-        // console.log('start_time', incomingSession.start_time);
+        changeStatus(Status.connect, [answerCall], [stopIncoming]);
         intervalId = setInterval(() => {
           updateFields();
         }, 1000);
       });
-      incomingSession.on('ended', function () {
-        clearStatus();
-        statusTitle.innerHTML = 'Соединение завершено';
-        statusView.style.background = 'red';
-        answerCall.hidden = true;
-        stopIncoming.hidden = true;
-        waiting.hidden = false;
+      session.on('ended', function () {
         console.log('[ INCOMING CALL ENDED ]');
+        clearStatus();
+        changeStatus(Status.finish, [answerCall, stopIncoming], [waiting]);
         clearInterval(intervalId);
         clearTime();
       });
-      incomingSession.on('failed', function (e) {
-        clearStatus();
-        statusTitle.innerHTML = 'Соединение прервано';
-        statusView.style.background = 'red';
-
-        answerCall.hidden = true;
-        stopIncoming.hidden = true;
-        waiting.hidden = false;
+      session.on('failed', function (e) {
         console.log('[ INCOMING CALL FAILED ]: ', e.cause);
+        clearStatus();
+        changeStatus(Status.interrupted, [answerCall, stopIncoming], [waiting]);
         clearInterval(intervalId);
         clearTime();
       });
@@ -108,38 +93,25 @@ startCall.addEventListener('click', () => {
   const eventHandlers = {
     'progress': function (e) {
       console.log('[ CALL IN PROGRESS ]');
-      statusTitle.innerHTML = 'Вызов';
-      statusView.style.background = 'orange';
-
-      startCall.style.display = 'none';
-      stopCall.hidden = false;
+      changeStatus(Status.ringing, [startCall], [stopCall]);
     },
     'failed': function (e) {
       console.log('[ CALL FAILED WITH ]: ' + e.cause);
-
       clearStatus();
-      statusTitle.innerHTML = 'Соединение прервано';
-      statusView.style.background = 'red';
-      startCall.style.display = 'block';
-      stopCall.hidden = true;
+      changeStatus(Status.interrupted, [stopCall], [startCall]);
       clearInterval(intervalId);
       clearTime();
     },
     'ended': function (e) {
       console.log('[ CALL ENDED ]');
-
       clearStatus();
-      statusTitle.innerHTML = 'Соединение завершено';
-      statusView.style.background = 'red';
-      startCall.style.display = 'block';
-      stopCall.hidden = true;
+      changeStatus(Status.finish, [stopCall], [startCall]);
       clearInterval(intervalId);
       clearTime();
     },
     'confirmed': function (e) {
       console.log('[ CALL CONFIRMED ]');
-      statusTitle.innerHTML = 'Соединение установлено';
-      statusView.style.background = 'rgb(31, 245, 31)';
+      changeStatus(Status.connect, [], []);
       intervalId = setInterval(() => {
         updateFields();
       }, 1000);
@@ -156,14 +128,14 @@ startCall.addEventListener('click', () => {
 });
 
 stopCall.addEventListener('click', () => {
-  if (session || incomingSession) {
+  if (session) {
     ua.terminateSessions();
     console.log('[ STOP BUTTON CLICK -> TERMINATE SESSION ]');
   }
 });
 
 stopIncoming.addEventListener('click', () => {
-  if (session || incomingSession) {
+  if (session) {
     ua.terminateSessions();
     console.log('[ STOP BUTTON CLICK -> TERMINATE SESSION ]');
   }
@@ -171,7 +143,7 @@ stopIncoming.addEventListener('click', () => {
 
 answerCall.addEventListener('click', () => {
   console.log('[REPLY BUTTON CLICK]');
-  incomingSession.answer({
+  session.answer({
     mediaConstraints: {
       audio: true,
       video: false,
