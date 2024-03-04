@@ -5,11 +5,13 @@ import outcoming from './handlers/outcoming.js';
 import incoming from './handlers/incoming.js';
 import register from './handlers/register.js';
 
-const loginForm = document.querySelector('.form');
 export const startCall = document.querySelector('.start-call-icon');
 export const stopCall = document.querySelector('.end-call-icon');
 export const sipNumber = document.querySelector('.input');
+
 export var ua, session;
+
+const loginForm = document.querySelector('.form');
 const clear = document.querySelector('.clear');
 
 loginForm.addEventListener('submit', e => {
