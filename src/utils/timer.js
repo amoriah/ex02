@@ -1,4 +1,5 @@
-import { timeSpan } from '../script.js';
+import { timeSpan } from './status.js';
+
 let time = { h: 0, m: 0, s: 0 };
 let upTime = {
   upH: time.h,

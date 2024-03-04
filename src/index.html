@@ -18,12 +18,16 @@
             <h4 class="block-title">Исходящий звонок</h4>
             <input
               value="0336442"
-              id="num"
+              class="sip-num"
               type="text"
               placeholder="Введите sip номер"
             />
             <button class="start-call-btn">Вызов</button>
-            <button class="stop-call-btn terminate" hidden style="background-color: red">
+            <button
+              class="stop-call-btn terminate"
+              hidden
+              style="background-color: red"
+            >
               Завершить
             </button>
           </div>
@@ -50,6 +54,13 @@
             >
               Завершить
             </button>
+            <button
+              class="reset-call terminate"
+              hidden
+              style="background-color: red"
+            >
+              Отклонить вызов
+            </button>
           </div>
         </div>
         <div class="block info-block">
@@ -62,25 +73,21 @@
           <div class="block-item history">
             <h4 class="block-title">История звонков</h4>
             <ul class="history-list">
-              <li><span>время</span><span>тип</span><span>номер</span></li>
-              <li><span>время</span><span>тип</span><span>номер</span></li>
-              <li><span>время</span><span>тип</span><span>номер</span></li>
-              <li><span>время</span><span>тип</span><span>номер</span></li>
-              <li><span>время</span><span>тип</span><span>номер</span></li>
-              <li><span>время</span><span>тип</span><span>номер</span></li>
+              <li class="list-title">
+                <span>время</span><span>тип</span><span>номер</span>
+              </li>
             </ul>
           </div>
         </div>
       </div>
     </div>
 
-    <div id="login-block" style="display: block">
+    <div class="login-block" style="display: block">
       <div class="form-login-container">
-        <form class="form" id="form" method="post" enctype="text/plain">
+        <form class="form" method="post" enctype="text/plain">
           <div class="fields">
             <input
               type="text"
-              id="login"
               value="0336443"
               class="field input_login"
               placeholder="Login"
@@ -88,7 +95,6 @@
             />
             <input
               type="password"
-              id="password"
               value="fLkFmpFFm5"
               class="field input_password"
               placeholder="Password"
@@ -96,7 +102,6 @@
             />
             <input
               type="text"
-              id="server"
               value="voip.uiscom.ru"
               class="field input_server"
               placeholder="Server"
@@ -104,14 +109,14 @@
             />
           </div>
           <div class="form-footer">
-            <button class="form-submit-button" id="submit-button" type="submit">
-              Login
-            </button>
+            <button type="submit">Login</button>
           </div>
         </form>
       </div>
     </div>
     <script src="../jssip.min.js"></script>
     <script src="script.js" type="module"></script>
+    <script src="./utils/status.js" type="module"></script>
+    <script src="./utils/history.js" type="module"></script>
   </body>
 </html>

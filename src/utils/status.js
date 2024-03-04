@@ -1,4 +1,6 @@
-import { statusTitle, statusView, timeSpan } from '../script.js';
+export const statusTitle = document.querySelector('.status-title');
+export const statusView = document.querySelector('.status');
+export const timeSpan = document.querySelector('.time');
 
 export const Status = {
   idle: 'Свободная линия',

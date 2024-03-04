@@ -1,4 +1,4 @@
-#login-block {
+.login-block {
   margin: auto;
   display: flex;
   flex-direction: column;
@@ -162,4 +162,8 @@ li {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.list-title {
+  font-weight: bold;
 }
