@@ -21,7 +21,7 @@ cd ex01
   2. Логин: 0336443
   3. Пароль: fLkFmpFFm5
 
-Для тестирования я испольховала [3cx](https://www.uiscom.ru/podderzhka/nastrojka-oborudovanija/)
+Для тестирования я использовала [3cx](https://www.uiscom.ru/podderzhka/nastrojka-oborudovanija/)
 
 ## Картиночки
 
